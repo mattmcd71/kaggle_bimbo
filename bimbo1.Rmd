@@ -1,0 +1,66 @@
+---
+title: "bimbo1"
+author: "Matt McDonald"
+date: "July 22, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Load data
+
+We're going to use data.table here
+```{r readdata}
+library(data.table)
+#train <- fread('train.csv')
+weeknums <- levels(factor(train$Semana))
+length(unique(train$Agencia_ID))
+length(unique(train$Canal_ID))
+
+
+
+clients <- fread('cliente_tabla.csv', header=TRUE)
+nrow(clients) - length(unique(clients$Cliente_ID))
+
+products <- read.csv('producto_tabla.csv', header = TRUE)
+
+```
+
+week numbers go from 3 to 9
+
+there are 930500 unique clientIDs, out of 935362...4862 duplicates to clean up
+
+product name has information in it...how many peices, and the weight. also someother code in there
+
+552 agency ids
+agencies are sales depots
+
+Adjusted demand (Demanda uni equil) will be between 0 and Sales unit (Venta hoy)
+
+
+```{r look at one route only}
+
+#deepdive <- train[train$Ruta_SAK==3301,]
+#rm(train)
+summary(deepdive)
+
+par(mfrow=c(2,1))
+hist(deepdive$Venta_uni_hoy, col='red')
+hist(deepdive$Dev_uni_proxima, col='blue')
+hist(deepdive$Demanda_uni_equil, col='blue')
+
+deepdive[deepdive$Dev_uni_proxima>0,]
+
+prop.table(table(deepdive$Dev_uni_proxima))
+deepdive[deepdive$Dev_uni_proxima>180,]
+
+table(deepdive$Venta_uni_hoy==deepdive$Demanda_uni_equil)
+
+table(deepdive$Producto_ID)
+View(deepdive[deepdive$Producto_ID==1039,])
+
+```
+
+
